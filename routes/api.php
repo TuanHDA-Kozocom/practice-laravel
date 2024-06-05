@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuthController;
+use App\Http\Middleware\AuthenticateSecretKey;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -14,6 +16,6 @@ Route::prefix('v1')->group(function () {
     Route::put('products', [ProductController::class, 'updateProduct']);
 });
 
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::resource('products', ProductController::class);
-// });
+Route::group(['middleware' => AuthenticateSecretKey::class], function () {
+    Route::post('auth/register', [AuthController::class, 'register']);
+});

@@ -9,4 +9,6 @@ Homestead.json
 .env
 *.sublime-*
 data
-storage
+.DS_Store
+/storage/*.key
+/storage/debugbar

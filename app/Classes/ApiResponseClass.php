@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class ApiResponseClass
 {
-    public static function setResponse($result, $code = 200)
+    public static function set200Response($result, $code = 200)
     {
         $response = [
             'data' => $result
@@ -17,10 +17,13 @@ class ApiResponseClass
 
     }
 
+    public static function set400Response($message, $code=400) {
+        return response()->json(['msg' => 'Do not register successfully'], 211);
+    }
+
     public static function throw($e, $message = "Something went wrong! Process not completed")
     {
         Log::info($e);
-        //dd($e.);
         throw new HttpResponseException(response()->json(["message" => $message], 500));
     }
 

@@ -8,6 +8,7 @@ use App\Interfaces\ProductRepositoryInterface;
 use App\Models\Product;
 use App\Classes\ApiResponseClass;
 use App\Http\Resources\ProductResource;
+
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -17,10 +18,11 @@ class ProductController extends Controller
     {
         $this->productRepositoryInterface = $productRepositoryInterface;
     }
+
     public function getListProducts()
     {
         $data = $this->productRepositoryInterface->index();
-        return ApiResponseClass::setResponse(ProductResource::collection($data), 200);
+        return ApiResponseClass::set200Response(ProductResource::collection($data), 200);
     }
 
     /**
@@ -37,14 +39,14 @@ class ProductController extends Controller
     public function createProduct(StoreProductRequest $request)
     {
         $detail = [
-            'name'=> $request->name,
+            'name' => $request->name,
         ];
         DB::beginTransaction();
-        try{
+        try {
             $product = $this->productRepositoryInterface->store($detail);
             DB::commit();
-            return ApiResponseClass::setResponse(new ProductResource($product), 200);
-        }catch(\Exception $ex) {
+            return ApiResponseClass::set200Response(new ProductResource($product), 200);
+        } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }
     }
@@ -78,7 +80,7 @@ class ProductController extends Controller
             $product = $this->productRepositoryInterface->update($updateDetails, $request->id);
 
             DB::commit();
-            return ApiResponseClass::setResponse('', 201);
+            return ApiResponseClass::set200Response(null, 201);
 
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
